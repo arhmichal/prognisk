@@ -1,4 +1,3 @@
-%include "../../lib_io64/asm64_io.inc"
 %include "../../lib_arh64/lib_arh.macro.asm"
 
 section .text   ; the code parto of file
