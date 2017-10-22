@@ -61,29 +61,21 @@
 %endmacro
 
 
-%macro execIO 1-7
-    zero rax
-    exec %{1:-1}
-%endmacro
-
-
 
 %macro StackAllign16 0
-    %%StackAllign16:
-    mov     rax, rsp
-    and     rax, 0xF
-    cmp     rax, 0
-    jz      %%clear
-    push    byte 0x55
-    %%clear:
+    mov r12, rsp    ; r10 - example register not changed by function call
+    and rsp, -16    ; FFFFFFFFFFFFFFF0
 %endmacro
 %macro StackUnAllign16 0
-    %%StackUnAllign16:
-    move    rax, [rsp]
-    cmp     al, 0x55
-    jnz     %%clear
-    add     rsp, 8
-    %%clear:
+    mov rsp, r12    ; r10 - the same example register as above
+%endmacro
+
+
+%macro execIO 1-7
+    StackAllign16
+    zero rax
+    exec %{1:-1}
+    StackUnAllign16
 %endmacro
 
 

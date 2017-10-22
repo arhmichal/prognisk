@@ -22,8 +22,6 @@ main:
 
     zero    rax, rbx, rcx, rdx
 
-    StackAllign16
-
     execIO printf,    str_gimme_a_number
     execIO scanf,     str_pattern_int, long_the_number
     execIO printf,    str_got_a_number, [long_the_number]
@@ -40,8 +38,6 @@ main:
         execIO printf,    str_is_not_a_prime, [long_the_number]
         jmp     .end_if
     .end_if:
-
-    StackUnAllign16
 
     return;
 
