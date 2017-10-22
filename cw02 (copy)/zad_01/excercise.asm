@@ -19,7 +19,6 @@ extern  scanf   ; the C function, to be called
 global asm_main
 asm_main:
     enter 0,0
-    jmp   NEW_IMPLEMENTATION
 main:
 
     zero    rax, rbx, rcx, rdx

@@ -7,9 +7,13 @@ LIST = lst
 # comlpiler assembler
 AC = nasm
 AINCPATHS = 
-AINCPATHS += -i ../path
+AINCPATHS += -I../../lib_arh64/
+AFLAG_preprocessOnly = -e
+AFLAG_predefineMacro = -DMacroName
 ACFLAGS = -f elf64 -F dwarf -g -w-macro-params
-# ACFLAGS += $AINCPATHS
+ACFLAGS += ${AINCPATHS}
+# ACFLAGS += ${AFLAG_preprocessOnly}
+# ACFLAGS += ${AFLAG_predefineMacro}
 
 # comlpiler c++
 CC = gcc
