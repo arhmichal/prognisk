@@ -6,7 +6,11 @@ LIST = lst
 
 # comlpiler assembler
 AC = nasm
+AINCPATHS = 
+AINCPATHS += -i ../path
 ACFLAGS = -f elf64 -F dwarf -g -w-macro-params
+# ACFLAGS += $AINCPATHS
+
 # comlpiler c++
 CC = gcc
 CCFLAGS = -g
