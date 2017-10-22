@@ -1,0 +1,56 @@
+gdb help
+
+see https://sourceware.org/gdb/onlinedocs/gdb/TUI-Keys.html#TUI-Keys
+
+; refresh terminal content
+ctrl+l
+
+; set a breakpoint
+break _start
+b _start
+
+; run program
+run
+
+; tryb graficzny
+ctrl+x, ctrl+a
+ctrl+x, a
+
+; tryb poglądu z jednym oknem
+ctrl+x, 1
+
+; tryb podglądu, dwa okna
+; w tym zawartości rejestrów
+; kolejne naciśnięcia zmieniają zawartość okien
+ctrl+x, 2
+
+; set syntax intel
+set disassembly-flavor intel
+
+; checkout the function code and where you are
+disassemble _start
+list
+
+; print info
+info registers
+info float
+info stack
+
+; print variable / register
+print $rsp
+p $rsp
+
+print/x $rsp ; print in hex
+print/d $rax ; print in dec
+
+; execite current and go to next instruction
+nexti
+ni
+
+; execute till next breakpoint
+next
+
+; quit GDB
+quit
+q
+

@@ -1,0 +1,14 @@
+
+call print_int      ; printf("%i", RAX)
+call print_char     ; printf("%c", AL)
+call print_string   ; printf("%s", (*EAX).c_str())
+call print_nl       ; printf("\n")
+
+call read_int       ; scanf("%i", &EAX)
+call read_char      ; scanf("%c", &EAX)
+
+call println_int    ; (only asm64_io) prints with \n
+call println_char   ; (only asm64_io) prints with \n
+call println_string ; (only asm64_io) prints with \n
+
+dump_regs label     ; prints registers and flags. label printed above them
