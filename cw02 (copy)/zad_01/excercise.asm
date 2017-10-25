@@ -1,4 +1,5 @@
-%include "../../lib_arh64/lib_arh.macro.asm"
+%include "lib_arh.macro.asm"
+%include "fuck_io.macro.asm"
 
 section .text   ; the code parto of file
 
@@ -22,9 +23,9 @@ main:
 
     zero    rax, rbx, rcx, rdx
 
-    execIO printf,    str_gimme_a_number
-    execIO scanf,     str_pattern_int, long_the_number
-    execIO printf,    str_got_a_number, [long_the_number]
+    execIO printf,    "gimme a number for the prime test%c", nl
+    execIO scanf,     "%u", long_the_number
+    execIO printf,    "processing number %u for being a prime number%c", [long_the_number], nl
 
     exec f_isPrime, [long_the_number]
 
@@ -32,10 +33,10 @@ main:
         cmp     rax, true
         jne     .printNotPrime
     .printPrime:
-        execIO printf,    str_is_a_prime, [long_the_number]
+        execIO printf,    "number %u is a prime number%c", [long_the_number], nl
         jmp     .end_if
     .printNotPrime:
-        execIO printf,    str_is_not_a_prime, [long_the_number]
+        execIO printf,    "number %u is NOT a prime number%c", [long_the_number], nl
         jmp     .end_if
     .end_if:
 
@@ -85,10 +86,5 @@ section .data   ; Initialized data
 
     long        lowest_prime,   2
     long        the_number,     4
-    cstring     gimme_a_number, "gimme a number for the prime test", NL
-    cstring     got_a_number,   "processing number %u for being a prime number", NL
-    cstring     is_a_prime,     "number %u is a prime number", NL
-    cstring     is_not_a_prime, "number %u is NOT a prime number", NL
-    cstring     pattern_int,    "%u"
 
 section .bss    ; UnInitialized data

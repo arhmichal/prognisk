@@ -1,5 +1,5 @@
-%ifndef LIB_ARH_MACRO__SYSTEM_CALLS__ASM
-    %define LIB_ARH_MACRO__SYSTEM_CALLS__ASM
+%ifndef FUCK_SYSTEM_MACRO__ASM
+    %define FUCK_SYSTEM_MACRO__ASM
 
 %define std_in      0
 %define std_out     1

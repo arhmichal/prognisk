@@ -2,8 +2,8 @@
     %define LIB_ARH_MACRO__ASM
 
 
-%include "lib_arh.macro_system_calls.asm"
-%include "lib_arh.macro_function_calls.asm"
+%include "fuck_system.macro.asm"
+%include "fuck_functions.macro.asm"
 
 
 %idefine NL 10  ; \n
@@ -58,24 +58,6 @@
 %macro move 2
     zero %1
     mov  %1, %2
-%endmacro
-
-
-
-%macro StackAllign16 0
-    mov r12, rsp    ; r10 - example register not changed by function call
-    and rsp, -16    ; FFFFFFFFFFFFFFF0
-%endmacro
-%macro StackUnAllign16 0
-    mov rsp, r12    ; r10 - the same example register as above
-%endmacro
-
-
-%macro execIO 1-7
-    StackAllign16
-    zero rax
-    exec %{1:-1}
-    StackUnAllign16
 %endmacro
 
 

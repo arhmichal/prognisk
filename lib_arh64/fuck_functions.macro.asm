@@ -1,5 +1,5 @@
-%ifndef LIB_ARH_MACRO__FUNCTION_CALLS__ASM
-    %define LIB_ARH_MACRO__FUNCTION_CALLS__ASM
+%ifndef FUCK_FUNCTIONS_MACRO__ASM
+    %define FUCK_FUNCTIONS_MACRO__ASM
 
 %define fArg0 RDI
 %define fArg1 RSI
@@ -33,31 +33,43 @@
 %endmacro
 
 
+%macro str_or_arg 2
+    %ifstr %2
+        jmp %%afterStr
+        %%str: db %2, 0
+        %%afterStr:
+        %1 %%str
+    %else
+        %1 %2
+    %endif
+%endmacro
+
+
 %macro f_SetIntArgs 0
 %endmacro
 %macro f_SetIntArgs 1
     f_SetIntArgs
-    fSetArg0 %1
+    str_or_arg fSetArg0, %1
 %endmacro
 %macro f_SetIntArgs 2
     f_SetIntArgs %{1:-2}
-    fSetArg1 %2
+    str_or_arg fSetArg1, %2
 %endmacro
 %macro f_SetIntArgs 3
     f_SetIntArgs %{1:-2}
-    fSetArg2 %3
+    str_or_arg fSetArg2, %3
 %endmacro
 %macro f_SetIntArgs 4
     f_SetIntArgs %{1:-2}
-    fSetArg3 %4
+    str_or_arg fSetArg3, %4
 %endmacro
 %macro f_SetIntArgs 5
     f_SetIntArgs %{1:-2}
-    fSetArg4 %5
+    str_or_arg fSetArg4, %5
 %endmacro
 %macro f_SetIntArgs 6
     f_SetIntArgs %{1:-2}
-    fSetArg5 %6
+    str_or_arg fSetArg5, %6
 %endmacro
 %macro fSetIntArgs 0-6
     f_SetIntArgs %{1:-1}
