@@ -88,6 +88,10 @@
     ret
 %endmacro
 
+%macro function 1
+%1: enter 0, 0
+%endmacro
+
 
 
 %endif

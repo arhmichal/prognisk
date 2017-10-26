@@ -1,3 +1,13 @@
+%ifndef FUCK_IO_MACRO__ASM
+    %define FUCK_IO_MACRO__ASM
+
+
+
+extern  printf  ; the C function, to be called
+extern  scanf   ; the C function, to be called
+
+
+
 %include "fuck_functions.macro.asm" ; for exec
 %include "lib_arh.macro.asm" ; for zero
 
@@ -18,3 +28,7 @@
     StackUnAllign16
 %endmacro
 
+
+
+
+%endif
