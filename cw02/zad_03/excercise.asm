@@ -1,6 +1,5 @@
-%include "../../lib_io64/asm64_io.inc"
-
-%define NL 10
+%include "lib_arh.macro.asm"
+%include "fuck_io.macro.asm"
 
 section .text   ; the code parto of file
 
@@ -14,154 +13,100 @@ section .text   ; the code parto of file
 ; global _start   ; makes it public
 ; _start:         ; the main() of assembler ; no longer used because of using lib_io64
 
-extern  printf  ; the C function, to be called
+  global asm_main
+function asm_main
 
-global asm_main
-asm_main:
-    enter 0,0
-main:
+    execIO  printf,    "calculating Least Common Multiple, need two numbers%c", nl
+    execIO  scanf,     "%i%i", long_a, long_b
+    execIO  printf,    "LCM(%i, %i) = ", [long_a], [long_b]
 
-    init_and_get_a_number:
-    call    zeroReg
+    exec    lcm, [long_a], [long_b]
+    ; exec    gcd, [long_a], [long_b]
+    mov     [long_gcd], rax
+    execIO  printf,    "%i%c", [long_gcd], nl
 
-    mov     eax, str_gimme_a_number
-    call    print_string
+    return;
 
-    call    read_int
-    mov     [int_a], eax
 
-    call    read_int
-    mov     [int_b], eax
+function lcm
+    cmp     fArg0, 0
+    jz      .ret_0
+    cmp     fArg1, 0
+    jz      .ret_0
+    jmp     .non_0
 
-    call    zeroReg
+    .ret_0:
+    return 0
 
-    mov     rdi, str_got_a_number       ; c-string addres with string (format with args if u want ^_^)
-    mov     esi, [int_a]                ; format's 1st arg
-    mov     edx, [int_b]                ; format's 1st arg
-    mov     rax, 0                      ; 0 xmm used
-    call    printf
-    init_and_get_a_number_done:
+    .non_0:
+    push    fArg0, fArg1
+    exec    gcd, fArg0, fArg1
+    pop     fArg0, fArg1
+    mov     rbx, rax
+    divR    fArg0, rbx
+    mul     fArg1
+    
+    return rax;
 
-    check_for_zeros:
-    call    zeroReg
-    mov     eax, [int_a]
-    mov     ebx, [int_b]
 
-    cmp     eax, 0
-    je      print_a
+function gcd
+    cmp     fArg0, 0
+    jz      .ret_b
+    cmp     fArg1, 0
+    jz      .ret_a
+    jmp     .if
 
-    cmp     ebx, 0
-    je      print_b
+    .ret_b:
+    return fArg1
+    .ret_a:
+    return fArg0
 
-    jmp     got_non_zero_numbers
+    .if:
+        cmp     fArg0, fArg1
+        jne     .if_true
+        jmp     .else
+    .if_true:
 
-    print_b:
-    mov     eax, [int_b]
-    call    println_int
-    jmp     return
+        cmp     fArg0, fArg1
+        ja      .reassignA
+        jb      .reassignB
+        je      .recurentCall
 
-    print_a:
-    mov     eax, [int_a]
-    call    println_int
-    jmp     return
+        .reassignA:
+        divR    fArg0, fArg1
+        mov     fArg0, rdx
+        jmp     .recurentCall
 
-got_non_zero_numbers:
-    call    zeroReg
-    mov     eax, [int_a]
-    mov     ebx, [int_b]
+        .reassignB:
+        divR    fArg1, fArg0
+        mov     fArg1, rdx
+        jmp     .recurentCall
 
-    call    gcd
-    mov     [int_gcd], eax
-    call    zeroReg
-    mov     eax, [int_a]
-    mov     ebx, [int_b]
-    mov     ecx, [int_gcd]
+        .recurentCall:
+        exec    gcd, fArg0, fArg1
+        return  rax;
 
-    div     ecx
-    mul     ebx
+        jmp     .end_if
+    .else:
+        return  fArg0;
+        jmp     .end_if
+    .end_if:
 
-    call    println_int
-    jmp     return
+    return 0;
 
 ; int NWD(int a, int b)
 ; {
 ;    if(a!=b)
 ;      return NWD(
-        ; a>b ? a-b : a,
-        ; b>a ? b-a : b);
+        ; a>b ? a%b : a,
+        ; b>a ? b%a : b);
 ;    return a;
 ; }
 
-gcd:                        ; Greatest Common Divider
-    enter   0, 0
-    mov     rcx, 0
-    mov     rdx, 0
-
-    cmp     eax, ebx
-    je      nwd_return      ; if (a == b) return a
-
-    cmp     eax, ebx
-    ja      sub_for_a
-    jb      sub_for_b
-
-    sub_for_a:
-    sub     eax, ebx
-    jmp     sub_done
-
-    sub_for_b:
-    sub     ebx, eax
-    jmp     sub_done
-
-    sub_done:
-    call    gcd             ; recursive call
-
-    nwd_return:             ; return a
-    jmp     return
-
-
-; support functions
-
-return:
-    leave
-    ret
-
-zeroReg:
-    mov     rax, 0
-    mov     rbx, 0
-    mov     rcx, 0
-    mov     rdx, 0
-    mov     rdi, 0
-    mov     rsi, 0
-    ret
-
-pushReg:
-    push    rax
-    push    rbx
-    push    rcx
-    push    rdx
-    push    rdi
-    push    rsi
-    ret
-
-popReg:
-    pop     rsi
-    pop     rdi
-    pop     rdx
-    pop     rcx
-    pop     rbx
-    pop     rax
-    ret
-
-; sys_exit:                   ; no longer used because of using lib_io64
-;     mov     rax, 60         ; sys_exit()
-;     syscall                 ; call;
-
 section .data   ; Initialized data
 
-    int_a:                  dd      0
-    int_b:                  dd      0
-    int_gcd:                dd      0
-    str_gimme_a_number:     db      "calculating Least Common Multiple, need two numbers", NL, 0
-    str_got_a_number:       db      "LCM(%i, %i) = ", 0
+    long                    a,      0
+    long                    b,      0
+    long                    gcd,    0
 
 section .bss    ; UnInitialized data

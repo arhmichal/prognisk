@@ -6,7 +6,15 @@ LIST = lst
 
 # comlpiler assembler
 AC = nasm
-ACFLAGS = -f elf64 -F dwarf -g
+AINCPATHS = 
+AINCPATHS += -I../../lib_arh64/
+AFLAG_preprocessOnly = -e
+AFLAG_predefineMacro = -DMacroName
+ACFLAGS = -f elf64 -F dwarf -g -w-macro-params
+ACFLAGS += ${AINCPATHS}
+# ACFLAGS += ${AFLAG_preprocessOnly}
+# ACFLAGS += ${AFLAG_predefineMacro}
+
 # comlpiler c++
 CC = gcc
 CCFLAGS = -g
@@ -14,7 +22,7 @@ CCompile = -c
 
 # lib_io64
 lib_io64_dir = lib_io64
-lib_io64_path = ../../lib_io64
+lib_io64_path = ../../${lib_io64_dir}
 lib_io64 = 
 lib_io64 += ${lib_io64_path}/asm64_io.o
 lib_io64 += ${lib_io64_path}/driver64.o
