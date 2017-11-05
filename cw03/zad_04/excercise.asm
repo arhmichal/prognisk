@@ -23,6 +23,5 @@ section .text   ; the code parto of file
 ; 123 zoz nz plgz.
 ; 123 ala ma kota.
 
-  global asm_main
-function asm_main
+Function asm_main
     return;

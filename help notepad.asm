@@ -481,11 +481,15 @@ suma:       ; kazdy inny kompilator wymaga prefix '_'
     ; zakładając, że zpushowałeś wcześniej jakieś argumenty
     ; stos będzie wyglądał jakoś tak ...
     0x0000
-    0x0001
+    0x0010
     ...
+    0x0f10
+    0x0f20  rsp     var_3 (value)       rsp-0
+    0x0f30          var_2 (value)       rsp-var_2.size
+    0x0f40          var_1 (value)       rsp-var_2.size-var_3.size
     0x0f50  rsp     arg_3 (pointer to)  rbp+4*64
-    0x0f40          arg_2 (pointer to)  rbp+3*64
-    0x0f30          arg_1 (pointer to)  rbp+2*64
-    0x0f20          return pointer      rbp+1*64
-    0x0f10  rbp     prev rbp            rbp+0*64
-    0x0f00  ...
+    0x0f60          arg_2 (pointer to)  rbp+3*64
+    0x0f70          arg_1 (pointer to)  rbp+2*64
+    0x0f80          return pointer      rbp+1*64
+    0x0f90  rbp     prev rbp            rbp+0*64
+    0x0fa0  ...

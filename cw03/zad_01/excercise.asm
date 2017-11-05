@@ -1,6 +1,9 @@
 %include "lib_arh.macro.asm"
 %include "fuck_io.macro.asm"
 
+extern  printf  ; the C function, to be called
+extern  scanf   ; the C function, to be called
+
 section .data   ; Initialized data
     
     long    max, 0
@@ -8,7 +11,7 @@ section .data   ; Initialized data
 
 section .bss    ; UnInitialized data
 
-section .text   ; the code parto of file
+section .text   ; the code part of file
 
 ; zestaw  03
 ; zadanie 01
@@ -38,7 +41,7 @@ function asm_main
 
     execIO  printf, "give a number ... "
     execIO  scanf, "%il", long_max
-    execIO  printf, "amount of numbers < %i is ", [long_max]
+    execIO  printf, "amount of numbers x < %i is ", [long_max]
 
 nextPartWriteAmount:
 

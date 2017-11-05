@@ -44,6 +44,11 @@
 %idefine int.size 4
 %idefine long.size 8
 
+%define _8b byte
+%define _16b word
+%define _32b dword
+%define _64b qword
+
 %macro bajt 2+
     byte_%1: db %2
 %endmacro
