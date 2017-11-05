@@ -1,5 +1,9 @@
 %include "lib_arh.macro.asm"
 %include "fuck_io.macro.asm"
+%include "fuck_logic.macro.asm"
+
+extern  printf  ; the C function, to be called
+extern  scanf   ; the C function, to be called
 
 section .data   ; Initialized data
 
@@ -14,7 +18,11 @@ section .text   ; the code parto of file
 ; s1="abcdefghijklmnopqrstuvwxyz"
 ; s2="zyxwvutsrqponmlkjihgfedcba"
 
-; Napisz program, który dla każdej litery ciągu wejściowego znalezionej na pozycji n w ciągu s1 wypisze odpowiadającą jej literę z ciągu s2 na pozycji n, natomiast nie znalezione znaki wypisuje bez zmian.
+; Napisz program, który dla każdej litery ciągu wejściowego
+; znalezionej na pozycji n w ciągu s1
+; wypisze odpowiadającą jej literę z ciągu s2 na pozycji n,
+; natomiast nie znalezione znaki wypisuje bez zmian.
+;
 ; Przykład:
 ; Podaj ciąg znaków...
 ; ala ma kota

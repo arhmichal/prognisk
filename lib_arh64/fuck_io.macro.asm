@@ -12,11 +12,11 @@
 %include "lib_arh.macro.asm" ; for zero
 
 %macro StackAllign16 0
-    mov r12, rsp    ; r10 - example register not changed by function call
+    mov r12, rsp    ; r12 - example register not changed by function call
     and rsp, -16    ; FFFFFFFFFFFFFFF0
 %endmacro
 %macro StackUnAllign16 0
-    mov rsp, r12    ; r10 - the same example register as above
+    mov rsp, r12    ; r12 - the same example register as above
 %endmacro
 
 
@@ -26,6 +26,18 @@
     zero rax
     exec %{1:-1}
     StackUnAllign16
+%endmacro
+
+%macro execIO_safe 1-7
+    push rax, rcx, rdx
+    execIO %{1:-1}
+    pop  rax, rcx, rdx
+%endmacro
+
+%macro execIO_paranoid_safe 1-7
+    push rax, rcx, rdx, rsi, rdi, r8, r9, r10, r11, r12
+    execIO %{1:-1}
+    pop  rax, rcx, rdx, rsi, rdi, r8, r9, r10, r11, r12
 %endmacro
 
 

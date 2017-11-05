@@ -446,6 +446,7 @@ extern int suma(int, int);
 ; w innych jednostach kompilacji 
 global suma ; UWAGA ponieważ GCC to nazwa jest identyczna
 suma:       ; kazdy inny kompilator wymaga prefix '_'
+            ; np
 
 
 
@@ -496,3 +497,10 @@ suma:       ; kazdy inny kompilator wymaga prefix '_'
     ...
     0x1210  previous rbp
     ...
+
+; adresowanie pośrednie np dla tablic
+add dx, [rbx + 2*rcx - 2]   ; rbx ma pointer do tablicy
+                            ; index można wyliczać też z wartości rejestru
+
+
+

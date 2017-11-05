@@ -40,6 +40,7 @@
 
 %idefine byteInBits 8
 %idefine byte.size 1
+%idefine char.size 1
 %idefine word.size 2
 %idefine int.size 4
 %idefine long.size 8
@@ -51,6 +52,9 @@
 
 %macro bajt 2+
     byte_%1: db %2
+%endmacro
+%macro char 2+
+    char_%1: db %2
 %endmacro
 %macro word 2+
     word_%1: dw %2

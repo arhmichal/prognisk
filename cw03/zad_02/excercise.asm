@@ -45,11 +45,7 @@ function getMaxElem
 
     dec     rcx
     while   rcx, ge, 0
-
-        push rax, rcx, rdx
-        execIO printf, "processing value %i%c", integers(rcx), nl
-        pop  rax, rcx, rdx
-
+        execIO_safe printf, "processing value %i%c", integers(rcx), nl
         if  integers(rcx), g, edx
             mov     edx, integers(rcx)
         endif
