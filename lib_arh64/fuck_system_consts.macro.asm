@@ -1,5 +1,5 @@
-%ifndef FUCK_SYSTEM_MACRO__ASM
-    %define FUCK_SYSTEM_MACRO__ASM
+%ifndef FUCK_SYSTEM_CONSTS_MACRO__ASM
+    %define FUCK_SYSTEM_CONSTS_MACRO__ASM
 
 %define std_in      0
 %define std_out     1

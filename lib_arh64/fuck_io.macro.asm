@@ -3,8 +3,8 @@
 
 
 
-extern  printf  ; the C function, to be called
-extern  scanf   ; the C function, to be called
+; extern  printf  ; the C function, to be called
+; extern  scanf   ; the C function, to be called
 
 
 

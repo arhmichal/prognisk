@@ -2,8 +2,9 @@
     %define LIB_ARH_MACRO__ASM
 
 
-%include "fuck_system.macro.asm"
-%include "fuck_functions.macro.asm"
+
+%include "fuck_system_consts.macro.asm"
+
 
 
 %idefine NL 10  ; \n
@@ -11,6 +12,7 @@
 
 %idefine true  0x1
 %idefine false 0x0
+
 
 
 %macro zero 1-*
@@ -36,28 +38,34 @@
 
 
 
-%macro Bajt 2
+%idefine byteInBits 8
+%idefine byte.size 1
+%idefine word.size 2
+%idefine int.size 4
+%idefine long.size 8
+
+%macro bajt 2+
     byte_%1: db %2
 %endmacro
-%macro int 2
+%macro word 2+
+    word_%1: dw %2
+%endmacro
+%macro int 2+
     int_%1: dd %2
 %endmacro
-%macro long 2
+%macro long 2+
     long_%1: dq %2
 %endmacro
 %macro cstring 2+
-    str_%1: db %2,0
+    str_%1: db %2, 0
+%endmacro
+%macro charstring 2+
+    str_%1: db %2
+    str_%1.len: equ $ - str_%1
 %endmacro
 %macro string 2+
-    str_%1: db %2
-    str_%1_len: equ $ - str_%1
-%endmacro
-
-
-
-%macro move 2
-    zero %1
-    mov  %1, %2
+    str_%1: db %2, 0
+    str_%1.len: equ $ - str_%1
 %endmacro
 
 
@@ -75,9 +83,11 @@
 
 
 
-
+%ifdef never_assemble_this
 
 %macro tmpName 0
 %endmacro
+
+%endif
 
 %endif

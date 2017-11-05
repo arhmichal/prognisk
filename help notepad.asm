@@ -332,8 +332,9 @@ aby pobrać wartość reg nie musi być wyłuskiwany, zmienna/labelka musi
 ; funckje to tylko kawałki kodu (bez granic) a ich wywołania to skoki do labelek
     ; Name    Comment Syntax
     CALL Proc   ; Call subroutine - jump z dodatkowym działaniem
+                ; robi jmp Proc oraz push miejsca do którego skoczyć spowrotem
     JMP  Dest   ; Jump
-    RET  [size] ; Return from subroutine AND <optional> pop SIZE bytes from the stack
+    RET  [size] ; Return from subroutine AND <optional> pop SIZE Bytes from the stack
 
 ; ostatnia wartość na stosie po wejściu
 ; do funkcji to adres powrotu z funkcji
@@ -470,3 +471,21 @@ suma:       ; kazdy inny kompilator wymaga prefix '_'
 ; jest równoważne       <==>
     leave               <==>    mov esp, ebp     
                                 pop ebp
+
+; ;;;
+; calling a func and retriving params
+; ;;;
+
+; kiedy robisz
+    call someFuncName
+    ; zakładając, że zpushowałeś wcześniej jakieś argumenty
+    ; stos będzie wyglądał jakoś tak ...
+    0x0000
+    0x0001
+    ...
+    0x0f50  rsp     arg_3 (pointer to)  rbp+4*64
+    0x0f40          arg_2 (pointer to)  rbp+3*64
+    0x0f30          arg_1 (pointer to)  rbp+2*64
+    0x0f20          return pointer      rbp+1*64
+    0x0f10  rbp     prev rbp            rbp+0*64
+    0x0f00  ...
