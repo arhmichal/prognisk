@@ -88,6 +88,12 @@
 
 
 
+%macro defArray 3 ; name, elem.size, ptr
+    %define %1(i) [%3 + %2 * i]
+%endmacro
+
+
+
 %ifdef never_assemble_this
 
 %macro tmpName 0

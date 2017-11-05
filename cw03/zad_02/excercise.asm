@@ -24,8 +24,6 @@ section .text   ; the code part of file
 
 Function asm_main
 
-    ; execIO  printf, "%i, %i%c", long_array.len, int_array, nl
-
     push    long_array.len, int_array
     exec    getMaxElem
     mov     rbx, rax
@@ -43,28 +41,20 @@ function getMaxElem
     mov     rdx, 0
     mov     edx, [rbx] ; maxElem = array[0]
 
-    ; push rax, rcx, rdx
-    ; execIO printf, "rdx maxElem %i%c", rdx, nl
-    ; pop  rax, rcx, rdx
+    defArray integers, int.size, rbx
 
     dec     rcx
     while   rcx, ge, 0
 
         push rax, rcx, rdx
-        execIO printf, "processing value %i%c", [rbx], nl
+        execIO printf, "processing value %i%c", integers(rcx), nl
         pop  rax, rcx, rdx
 
-        if  [rbx], g, edx
-            mov     edx, [rbx]
-            ; push rax, rcx, rdx
-            ; execIO printf, "rdx maxElem %i%c", rdx, nl
-            ; pop  rax, rcx, rdx
+        if  integers(rcx), g, edx
+            mov     edx, integers(rcx)
         endif
         dec     rcx
-        add     rbx, int.size
     endwhile
-
-    ; execIO  printf, "max element is %i%c", [rbx + int.size * 6], nl
 
     pop rbx
     return rdx, long.size * 2;
