@@ -2,6 +2,9 @@
 %include "fuck_io.macro.asm"
 
 section .data   ; Initialized data
+    
+    long    max, 0
+    long    num, 0
 
 section .bss    ; UnInitialized data
 
@@ -18,4 +21,42 @@ section .text   ; the code parto of file
 
   global asm_main
 function asm_main
+
+    zero    rax, rbx, rcx, rdx
+    mov     r13, rsp
+
+    execIO  printf, "give an array of integers, terminated with 0%c", nl
+
+    .DO_while:
+        execIO  scanf, "%il", long_num
+    .do_WHILE:
+        cmp     qword [long_num], 0
+        je      .do_while_BREAK
+        push    qword [long_num]
+        jmp     .DO_while
+    .do_while_BREAK:
+
+    execIO  printf, "give a number ... "
+    execIO  scanf, "%il", long_max
+    execIO  printf, "amount of numbers < %i is ", [long_max]
+
+nextPartWriteAmount:
+
+    mov     rbx, 0
+    .WHILE_do:
+        cmp     rsp, r13
+        jne     .while_DO
+        jmp     .while_do_BREAK
+    .while_DO:
+
+        pop     rdx
+        cmp     [long_max], rdx
+        jle     .skipIncrement
+        inc     rbx
+        .skipIncrement:
+        jmp     .WHILE_do
+    .while_do_BREAK:
+
+    execIO  printf, "%i%c", rbx, nl
+
     return;
