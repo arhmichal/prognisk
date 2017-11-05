@@ -59,9 +59,20 @@
             %$while:
             cmp     %1, %3
             j%+2    %$ifTrue
+            %$enddowhile:
         %pop dowhile
     %else
         %error "expected `do` before `dowhile`"
+    %endif
+%endmacro
+
+%macro break 0
+    %ifctx while
+        jmp     %$endWhile
+    %elifctx dowhile
+        jmp     %$enddowhile
+    %else
+        %error "expected `while` or `dowhile` before `break`"
     %endif
 %endmacro
 

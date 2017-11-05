@@ -12,6 +12,33 @@
 %define fArg4 R8
 %define fArg5 R9
 
+%define fArg0_64 RDI
+%define fArg1_64 RSI
+%define fArg2_64 RDX
+%define fArg3_64 RCX
+%define fArg4_64 R8
+%define fArg5_64 R9
+
+%define fArg0_32 EDI
+%define fArg1_32 ESI
+%define fArg2_32 EDX
+%define fArg3_32 ECX
+
+%define fArg0_16 DI
+%define fArg1_16 SI
+%define fArg2_16 DX
+%define fArg3_16 CX
+
+%define fArg0_8H DH
+%define fArg1_8H SH
+%define fArg2_8H DH
+%define fArg3_8H CH
+
+%define fArg0_8L DL
+%define fArg1_8L SL
+%define fArg2_8L DL
+%define fArg3_8L CL
+
 
 %macro fCountFloat 0-1 0
     mov RAX, %1
@@ -90,11 +117,13 @@
 
 
 %macro return 0-1 0
+    %pop
     mov     rax, %1
     leave
     ret
 %endmacro
 %macro return 2
+    %pop
     mov     rax, %1
     leave
     ret     %2
@@ -102,6 +131,7 @@
 
 
 %macro function 1
+    %push %1
 %1: enter 0, 0
 %endmacro
 %macro Function 1
