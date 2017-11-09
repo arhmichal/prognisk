@@ -416,6 +416,7 @@ Przekazywanie parametrów w trybach 64 bitowych (UNIX)
         XMM0,XMM1 - zmiennoprzecinkowy
         ST0, ST1 - long double
         pamięci pod adresem wskazanym przez RDI jeżeli zwraca się typ złożony.
+        !!! oznacza to, że jeśli zwracasz strukturę/klasę to jako pierwszy argument dostajesz wskaźnik do zwracanej struktury, reszta argumentów jest przepychana o jeden dalej !!!
 
 ; ważny dodatek
     Uwaga: Jeżeli przesyłamy przez wartość prostą strukturę to jest ona też umieszczana w rejestrach. 

@@ -1,24 +1,25 @@
 ; this is a help-lib for easy copy-paste;
 
-%include "../../lib_io64/asm64_io.inc"
-%include "../../lib_arh64/lib_arh.macro.asm"
+%include "lib_arh.macro.asm"
+%include "fuck_io.macro.asm"
+%include "fuck_logic.macro.asm"
 
-section .text   ; the code parto of file
+; %define DEBUG_ON
 
 extern  printf  ; the C function, to be called
 extern  scanf   ; the C function, to be called
 
+section .data   ; Initialized data
+
+section .bss    ; UnInitialized data
+
+section .text   ; the code parto of file
+
 global _start   ; makes it public
 _start:         ; the main() of assembler
 
-
-
-global asm_main
-asm_main:
-    enter 0,0
-main:
-    ; ...
-return;
+Function main
+    return;
 
 
 golbal_label:   ; widziana wszędzie | jak bardzo wszędzie?

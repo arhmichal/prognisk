@@ -43,7 +43,6 @@ ${E3}:
 ${E4}:
 	cd ${Z4} && $(MAKE) ${MAKEFLAGS}
 
-# The .PHONY rule keeps make from doing something with a file named clean
 .PHONY: clean
 clean: clean_${E1} clean_${E2} clean_${E3} clean_${E4}
 

@@ -80,7 +80,6 @@ ${MAIN}.${OBJECT_ext}: ${MAIN}.${CSOURCE_ext}
 	${CC} ${CCFLAGS} $^ -o $@
 
 # The .PHONY rule keeps make from doing something with a file named clean
-.PHONY: clean
 clean: clean_${EXCERCISE}
 clean_${EXCERCISE}:
 	rm -f *.${OBJECT_ext}
