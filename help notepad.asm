@@ -491,9 +491,9 @@ suma:       ; kazdy inny kompilator wymaga prefix '_'
     0x0f40          var_1 (value)       rsp-var_2.size-var_3.size
     0x0f50  rbp     prev rbp (value)    rbp+0*64    enter effect
     0x0f60          return pointer      rbp+1*64    call effect
-    0x0f70          arg_3 (pointer to)  rbp+2*64    push effect
+    0x0f70          arg_1 (pointer to)  rbp+2*64    push effect
     0x0f80          arg_2 (pointer to)  rbp+3*64    push effect
-    0x0f90          arg_1 (pointer to)  rbp+4*64    push effect
+    0x0f90          arg_3 (pointer to)  rbp+4*64    push effect
     0x0fa0  ...
     ...
     0x1210  previous rbp
