@@ -15,10 +15,10 @@ MAKEFLAGS = --no-print-directory
 # # #
 # targets
 # # #
-Z1 = zad_01
-Z2 = zad_02
-Z3 = zad_03
-Z4 = zad_04
+Z1 = cw01
+Z2 = cw02
+Z3 = cw03
+Z4 = cw04
 
 ALL = ${Z1} ${Z2} ${Z3} ${Z4}
 all: ${ALL}
@@ -42,10 +42,10 @@ ${Z4}:
 # # #
 # clean targets
 # # #
-CZ1 = clean_zad_01
-CZ2 = clean_zad_02
-CZ3 = clean_zad_03
-CZ4 = clean_zad_04
+CZ1 = clean_cw01
+CZ2 = clean_cw02
+CZ3 = clean_cw03
+CZ4 = clean_cw04
 
 .PHONY: clean
 CLEAN_ALL = ${CZ1} ${CZ2} ${CZ3} ${CZ4}

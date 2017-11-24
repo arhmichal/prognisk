@@ -8,9 +8,9 @@ ACFLAGS =
 # ACFLAGS += -l file.lst
 # # -f <out_format> set output format to <out_format>
 # # # elf64 == x86_64
-ACFLAGS += -f elf64
+# ACFLAGS += -f elf64
 # # # elf32 == i386 == elf
-# ACFLAGS += -f elf32
+ACFLAGS += -f elf32
 # # -F <dbg_format> set debugging format to <dbg_format>
 ACFLAGS += -F dwarf
 # # -g : generate debug information in selected debugging format, see -F
@@ -39,6 +39,8 @@ CCFLAGS =
 CCFLAGS += -g
 # -c : compile and assemble, but not link
 CCFLAGS += -c
+# -m32 : ???? allow compilation for 32bit
+CCFLAGS += -m32
 
 
 # # #
@@ -49,6 +51,15 @@ LD = gcc
 LDFLAGS =
 # -g : produce system-native debug information for gdb
 LDFLAGS += -g
+# -m32 : ???? allow linking for 32bit
+LDFLAGS += -m32
+
+# IMPORTANT !!! you need proper 32bit versions of libraries 
+# for GCC to find and link/compile in 32bit mode
+# the below solves the missing-sources-problem
+# 
+# sudo apt-get update
+# sudo apt-get install libc6-dev-i386
 
 
 # # #
@@ -58,7 +69,7 @@ MAKEFLAGS = --no-print-directory
 
 
 # file settings and commons
-EXCERCISE = excercise
+EXCERCISE = test
 MAIN = main
 ASOURCE_ext = asm
 CSOURCE_ext = c
@@ -73,14 +84,15 @@ LIST_ext = lst
 # $@ : $< <=first<=
 
 # remember, make executes the FIRST make rule it encounters and nothing more
-${EXCERCISE}: ${EXCERCISE}.${OBJECT_ext} ${MAIN}.${OBJECT_ext}
+# ${EXCERCISE}: ${EXCERCISE}.${OBJECT_ext} ${MAIN}.${OBJECT_ext}
+${EXCERCISE}: ${EXCERCISE}.${OBJECT_ext}
 	${LD} ${LDFLAGS} $^ -o $@
 
 ${EXCERCISE}.${OBJECT_ext}: ${EXCERCISE}.${ASOURCE_ext}
 	${AC} ${ACFLAGS} -l ${EXCERCISE}.${LIST_ext} $^ -o $@
 
-${MAIN}.${OBJECT_ext}: ${MAIN}.${CSOURCE_ext}
-	${CC} ${CCFLAGS} $^ -o $@
+# ${MAIN}.${OBJECT_ext}: ${MAIN}.${CSOURCE_ext}
+# 	${CC} ${CCFLAGS} $^ -o $@
 
 # The .PHONY rule keeps make from doing something with a file named clean
 clean: clean_${EXCERCISE}
@@ -93,8 +105,8 @@ clean_${EXCERCISE}:
 
 # # this is how you call other make inside a make
 # ${lib_io64_dir}:
-# 	cd ${lib_io64_path} && $(MAKE) ${MAKEFLAGS}
+#   cd ${lib_io64_path} && $(MAKE) ${MAKEFLAGS}
 
 # # this is how you call other make inside a make
 # clean_${lib_io64_dir}:
-# 	cd ${lib_io64_path} && $(MAKE) ${MAKEFLAGS} clean
+#   cd ${lib_io64_path} && $(MAKE) ${MAKEFLAGS} clean

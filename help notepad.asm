@@ -345,6 +345,7 @@ aby pobrać wartość reg nie musi być wyłuskiwany, zmienna/labelka musi
 
 ;;; interfejsowanie z C i konwencje wołania funkcji
 
+SYSTEMOWE - syscall
 Wywołania systemowe Linux AMD64 - syscall
 
     Podprogram wykonujemy przez syscall.
@@ -358,6 +359,7 @@ Wywołania systemowe Linux AMD64 - syscall
     Wartości ujemne z zakresu [-4095, -1] oznaczają błąd.
     Wywołanie może niszczyć zawartość rejestrów RCX, R11.
 
+FUNKCJE 32BIT - call
 ; Konwencja cdecl
 
 ;     Argumenty są przekazywane przez stos w kolejności od prawej do lewej.
@@ -394,6 +396,8 @@ Wywołania systemowe Linux AMD64 - syscall
 ;     Odtwarzamy wartość ESP z EBP i ściągamy ze stosu poprzednią wartość EBP
 ;     Wracamy z funkcji przez instrukcję RET
 
+
+FUNKCJE 64BIT - call
 Przekazywanie parametrów w trybach 64 bitowych (UNIX)
 
     pierwsze sześć argumentów, które są liczbami całkowitymi lub wskaźnikami (w kolejności od lewej do prawej) są umieszczane kolejno w rejestrach
