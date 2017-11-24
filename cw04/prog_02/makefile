@@ -69,7 +69,7 @@ MAKEFLAGS = --no-print-directory
 
 
 # file settings and commons
-EXCERCISE = test
+EXCERCISE = wyk_prog
 MAIN = main
 ASOURCE_ext = asm
 CSOURCE_ext = c
@@ -84,15 +84,15 @@ LIST_ext = lst
 # $@ : $< <=first<=
 
 # remember, make executes the FIRST make rule it encounters and nothing more
-# ${EXCERCISE}: ${EXCERCISE}.${OBJECT_ext} ${MAIN}.${OBJECT_ext}
-${EXCERCISE}: ${EXCERCISE}.${OBJECT_ext}
+# ${EXCERCISE}: ${EXCERCISE}.${OBJECT_ext}
+${EXCERCISE}: ${EXCERCISE}.${OBJECT_ext} ${MAIN}.${OBJECT_ext}
 	${LD} ${LDFLAGS} $^ -o $@
 
 ${EXCERCISE}.${OBJECT_ext}: ${EXCERCISE}.${ASOURCE_ext}
 	${AC} ${ACFLAGS} -l ${EXCERCISE}.${LIST_ext} $^ -o $@
 
-# ${MAIN}.${OBJECT_ext}: ${MAIN}.${CSOURCE_ext}
-# 	${CC} ${CCFLAGS} $^ -o $@
+${MAIN}.${OBJECT_ext}: ${MAIN}.${CSOURCE_ext}
+	${CC} ${CCFLAGS} $^ -o $@
 
 # The .PHONY rule keeps make from doing something with a file named clean
 clean: clean_${EXCERCISE}

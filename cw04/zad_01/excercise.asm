@@ -8,8 +8,8 @@ extern  printf  ; the C function, to be called
 extern  scanf   ; the C function, to be called
 
 section .data   ; Initialized data
-    long a, 0
-    long b, 0
+    int a, 0
+    int b, 0
 
 section .bss    ; UnInitialized data
 
@@ -25,10 +25,8 @@ section .text   ; the code parto of file
 
 Function main
 
-    execIO  scanf, "%i%i", long_a, long_b
-    divR    [long_a], _64b [long_b]
-    mov     r8, rax
-    mov     r9, rdx
-    execIO  printf, "%i / %i = %i r %i%c", [long_a], [long_b], r8, r9, nl
+    execIO  scanf, "%i%i", int_a, int_b
+    divE    [int_a], _32b [int_b]
+    execIO  printf, "%i / %i = %i r %i%c", _32b [int_a], _32b [int_b], eax, edx, nl
 
     return;
