@@ -3,6 +3,7 @@
 
 
 
+%include "fuck_bits.macro.asm" ; for regs
 %include "fuck_system_consts.macro.asm"
 
 
@@ -33,6 +34,20 @@
     %rep %0
         %rotate -1
         pop %1
+    %endrep
+%endmacro
+
+%macro pushRev 1-*
+    %rep %0
+        %rotate -1
+        push %1
+    %endrep
+%endmacro
+
+%macro popRev 1-*
+    %rep %0
+        pop %1
+        %rotate 1
     %endrep
 %endmacro
 
@@ -84,11 +99,13 @@
     mov     eax, %1
     div     %2
 %endmacro
-%macro divR 2
-    zero    rax, rdx
-    mov     rax, %1
-    div     %2
-%endmacro
+%if __BITS__ == 64
+    %macro divR 2
+        zero    rax, rdx
+        mov     rax, %1
+        div     %2
+    %endmacro
+%endif
 
 
 
@@ -97,12 +114,5 @@
 %endmacro
 
 
-
-%ifdef never_assemble_this
-
-%macro tmpName 0
-%endmacro
-
-%endif
 
 %endif

@@ -1,6 +1,8 @@
 %ifndef FUCK_SYSTEM_CONSTS_MACRO__ASM
     %define FUCK_SYSTEM_CONSTS_MACRO__ASM
 
+%include "fuck_bits.macro.asm" ; for regs
+
 %define std_in      0
 %define std_out     1
 
@@ -12,7 +14,7 @@
 %define sys_time    201     ; sys_exit()
 
 %macro sys_exec 1
-    move    rax, %1
+    move    reax, %1
     syscall
 %endmacro
 
