@@ -27,17 +27,21 @@ section .text   ; the code parto of file
 
 Function vectorProduct;(int size, int* v) return int
 
-    defArray vector, int.size, fArg1
+    defArray args, int.size, esp+8
+    mov edi, args(0)
+    mov esi, args(1)
+    defArray vector, int.size, esi
 
-    mov rax, fArg1
-    mov eax, [fArg1]
-    zero rax, rdx
-    mov rax, 1
+    mov eax, esi
+    mov eax, [esi]
+    zero eax, edx
+    mov eax, 1
 
-    dec fArg0
-    while fArg0, ge, 0
-        mov edx, _32b vector(fArg0)
+    dec edi
+    while edi, ge, 0
+        mov edx, _32b vector(edi)
         imul eax, edx
-        dec fArg0
+        dec edi
     endwhile
-    return rax;
+
+    return eax;
