@@ -23,7 +23,7 @@ section .text   ; the code parto of file
 ; i wypisujący na ekran ich iloraz przy użyciu funkcji printf.
 ; Należy przysłać tylko plik ASM.
 
-Function main
+Function main;() return void
 
     execIO  scanf, "%i%i", int_a, int_b
     divE    [int_a], _32b [int_b]

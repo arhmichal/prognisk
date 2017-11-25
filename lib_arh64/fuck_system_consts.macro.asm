@@ -14,7 +14,7 @@
 %define sys_time    201     ; sys_exit()
 
 %macro sys_exec 1
-    move    reax, %1
+    mov     reax, %1
     syscall
 %endmacro
 

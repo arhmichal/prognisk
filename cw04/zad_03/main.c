@@ -1,7 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-// extern int main();
-// extern int asm_main();
 
 /*/
 

@@ -1,5 +1,4 @@
 %include "lib_arh.macro.asm"
-; %include "fuck_io.macro.asm"
 %include "fuck_functions.macro.asm"
 %include "fuck_logic.macro.asm"
 
@@ -30,28 +29,31 @@ section .text   ; the code parto of file
 ; powinno wypisać 
 ; 5 4 3
 
-Function sort;(int * a, int *b, int * c)
-    zero rax, rcx
+Function sort;(int * a, int *b, int * c) return void
 
-    mov eax, [fArg0]
-    mov ecx, [fArg1]
+    defineParamIn args(0), ptrA, edi
+    defineParamIn args(1), ptrB, esi
+    defineParamIn args(3), ptrC, edx
+
+    mov eax, [ptrA]
+    mov ecx, [ptrB]
     if eax, l, ecx
-        mov [fArg0], ecx
-        mov [fArg1], eax
+        mov [ptrA], ecx
+        mov [ptrB], eax
     endif
 
-    mov eax, [fArg1]
-    mov ecx, [fArg2]
+    mov eax, [ptrB]
+    mov ecx, [ptrC]
     if eax, l, ecx
-        mov [fArg1], ecx
-        mov [fArg2], eax
+        mov [ptrB], ecx
+        mov [ptrC], eax
     endif
 
-    mov eax, [fArg0]
-    mov ecx, [fArg1]
+    mov eax, [ptrA]
+    mov ecx, [ptrB]
     if eax, l, ecx
-        mov [fArg0], ecx
-        mov [fArg1], eax
+        mov [ptrA], ecx
+        mov [ptrB], eax
     endif
 
     return;

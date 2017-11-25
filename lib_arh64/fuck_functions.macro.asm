@@ -154,10 +154,19 @@
 %macro function 1
     %push %1
 %1: enter 0, 0
+    defArray args, stackElement.size, rebp+stackElement.size*2
 %endmacro
 %macro Function 1
   global %1
 function %1
+%endmacro
+
+%macro defineParam 2; paramValue, name
+    %define %2 %1
+%endmacro
+%macro defineParamIn 3; paramValue, name, where
+    %define %2, %3
+    mov %3, %1
 %endmacro
 
 

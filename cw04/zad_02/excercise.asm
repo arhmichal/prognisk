@@ -1,5 +1,4 @@
 %include "lib_arh.macro.asm"
-; %include "fuck_io.macro.asm"
 %include "fuck_functions.macro.asm"
 %include "fuck_logic.macro.asm"
 
@@ -25,21 +24,16 @@ section .text   ; the code parto of file
 ; - ilość elementów tablicy i
 ; - wskaźnik na pierwszy element tablicy.
 
-Function vectorProduct;(int size, int* v) return int
+Function vectorProduct;(int size, int* ptrVector) return int
 
-    defArray args, int.size, esp+8
-    mov edi, args(0)
-    mov esi, args(1)
+    defineParamIn args(0), size, edi
+    defineParamIn args(1), ptrVector, esi
     defArray vector, int.size, esi
 
-    mov eax, esi
-    mov eax, [esi]
-    zero eax, edx
     mov eax, 1
-
     dec edi
     while edi, ge, 0
-        mov edx, _32b vector(edi)
+        mov edx, int.cast vector(edi)
         imul eax, edx
         dec edi
     endwhile

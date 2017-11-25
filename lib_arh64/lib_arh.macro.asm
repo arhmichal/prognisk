@@ -53,25 +53,44 @@
 
 
 
-%idefine byteInBits 8
+%idefine bitsInByte 8
+
 %idefine byte.size 1
 %idefine char.size 1
 %idefine word.size 2
+%idefine short.size 2
 %idefine int.size 4
 %idefine long.size 8
 
 %define _8b byte
+%idefine byte.cast byte
+%idefine char.cast byte
 %define _16b word
+%idefine word.cast word
+%idefine short.cast word
 %define _32b dword
+%idefine int.cast dword
 %define _64b qword
+%idefine long.cast qword
 
-%macro bajt 2+
+%if __BITS__ == 32
+    %define stackElement.size int.size
+    %define stackElement.cast int.cast
+%elif __BITS__ == 64
+    %define stackElement.size long.size
+    %define stackElement.cast long.cast
+%endif
+
+%macro byte 2+
     byte_%1: db %2
 %endmacro
 %macro char 2+
     char_%1: db %2
 %endmacro
 %macro word 2+
+    word_%1: dw %2
+%endmacro
+%macro short 2+
     word_%1: dw %2
 %endmacro
 %macro int 2+
@@ -111,6 +130,14 @@
 
 %macro defArray 3 ; name, elem.size, ptr
     %define %1(i) [%3 + %2 * i]
+%endmacro
+
+
+
+%define movVia(reg) mov_via_helping_reg reg, 
+%macro mov_via_helping_reg 3; pass_thrue_reg, to, from
+    mov %1, %3
+    mov %2, %1
 %endmacro
 
 

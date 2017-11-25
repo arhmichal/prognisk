@@ -490,10 +490,10 @@ suma:       ; kazdy inny kompilator wymaga prefix '_'
     0x0010
     ...     no local vars => rbp==rsp
     0x0f10
-    0x0f20  rsp     var_3 (value)       rsp-0
-    0x0f30          var_2 (value)       rsp-var_2.size
-    0x0f40          var_1 (value)       rsp-var_2.size-var_3.size
-    0x0f50  rbp     prev rbp (value)    rbp+0*8     enter effect
+    0x0f20  rsp     var_3 (value)       rbp-3*8
+    0x0f30          var_2 (value)       rbp-2*8
+    0x0f40          var_1 (value)       rbp-1*8
+    0x0f50  rbp     prev rbp (ptr)      rbp+0*8     enter effect
     0x0f60          return pointer      rbp+1*8     call effect
     0x0f70          arg_1 (pointer to)  rbp+2*8     push effect
     0x0f80          arg_2 (pointer to)  rbp+3*8     push effect

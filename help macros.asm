@@ -319,7 +319,7 @@ if, ifdef, ifmacro, ifctx, ifidn, ifidni, idif, ifnum, ifstr, iftoken, ifempty, 
 %$$labelName        ; reference to context-local label
                     ; of ONE LEVEL DEEPER context
 %$$$labelName       ; reference to context-local label
-                    ; of TWO LEVEL DEEPER context
+                    ; of TWO LEVELS DEEPER context
                     ; ... and so on
 
 ; example with repeat-until
