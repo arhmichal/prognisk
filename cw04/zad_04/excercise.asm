@@ -1,11 +1,10 @@
 %include "lib_arh.macro.asm"
-%include "fuck_io.macro.asm"
 %include "fuck_functions.macro.asm"
 %include "fuck_logic.macro.asm"
 
 ; %define DEBUG_ON
 
-extern  printf  ; the C function, to be called
+; extern  printf  ; the C function, to be called
 ; extern  scanf   ; the C function, to be called
 
 section .data   ; Initialized data
@@ -71,9 +70,6 @@ Function minmax;(int N, ...); N>0 return struct MM
         endif
         inc ecx
     endwhile
-
-    execIO printf, "DEBUG:: max=%d %c", int.cast [int_max], nl
-    execIO printf, "DEBUG:: min=%d %c", int.cast [int_min], nl
 
     movVia(eax) [edi], [int_max]
     movVia(eax) [edi+int.size], [int_min]
