@@ -5,8 +5,6 @@
 ; linkowanie: ld hello.o -o hello
 ; linkowanie: ld -m elf_x86_64  hello.o -o hello
 
-%define NL 10
-
 section .text            ; początek sekcji kodu.
 
 global _start            ; linker ld domyślnie rozpoczyna
@@ -23,9 +21,10 @@ _start:                   ; punkt startu programu
 
   mov     rax, 60         ; numer funkcji systemowej
                           ; (60=sys_exit - wyjdź z programu)
+  mov     rdi, 0          ; RDI - kod wyjścia
   syscall                 ; wywołujemy funkcję systemową
 
 section .data                   ; początek sekcji danych.
-  tekst db "Czesc Ziom", NL     ; nasz napis, który wyświetlimy
+  tekst db "Czesc", 0ah   ; nasz napis, który wyświetlimy
   dlugosc equ $ - tekst   ; długość napisu
 

@@ -1,4 +1,4 @@
-d; początek sekcji kodu.
+; początek sekcji kodu.
 section .text
 
 ; zestaw  01

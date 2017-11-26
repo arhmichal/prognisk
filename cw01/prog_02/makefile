@@ -73,7 +73,7 @@ MAKEFLAGS = --no-print-directory
 
 
 # file settings and commons
-EXCERCISE = excercise
+EXCERCISE = prog
 MAIN = main
 ASOURCE_ext = asm
 CSOURCE_ext = c
