@@ -102,11 +102,3 @@ clean_${EXCERCISE}:
 	rm -f ${EXCERCISE}.${LIST_ext}
 	rm -f makefile~
 	rm -f *.gz
-
-# # this is how you call other make inside a make
-# ${lib_io64_dir}:
-#   cd ${lib_io64_path} && $(MAKE) ${MAKEFLAGS}
-
-# # this is how you call other make inside a make
-# clean_${lib_io64_dir}:
-#   cd ${lib_io64_path} && $(MAKE) ${MAKEFLAGS} clean
