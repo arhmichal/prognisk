@@ -1,34 +1,80 @@
-# 
-FILE = excercise
-SOURCE = asm
-OBJECT = o
-LIST = lst
-
-# comlpiler assembler
+# # #
+# assembler compiler
+# # #
 AC = nasm
-AINCPATHS = 
-AINCPATHS += -I../../lib_arh64/
-AFLAG_preprocessOnly = -e
-AFLAG_predefineMacro = -DMacroName
-ACFLAGS = -f elf64 -F dwarf -g -w-macro-params
-ACFLAGS += ${AINCPATHS}
-# ACFLAGS += ${AFLAG_preprocessOnly}
-# ACFLAGS += ${AFLAG_predefineMacro}
 
-# comlpiler c++
+ACFLAGS =
+# # -l <list_file> : write listing to a list file <list_file>
+# ACFLAGS += -l file.lst
+# # -f <out_format> set output format to <out_format>
+# # # elf64 == x86_64
+ACFLAGS += -f elf64
+# # # elf32 == i386 == elf
+# ACFLAGS += -f elf32
+# # -F <dbg_format> set debugging format to <dbg_format>
+ACFLAGS += -F dwarf
+# # -g : generate debug information in selected debugging format, see -F
+ACFLAGS += -g
+# # -o <file> : output to the <file>
+# ACFLAGS += -o
+# # -I<path> : add <path> to search paths for looking for the includes
+ACFLAGS += -I../../lib_arh64/
+# # -D<macro>[=<value>] : pre-defines a macro
+# ACFLAGS += -D<macro>[=<value>]
+# # -w+foo : enables warning foo (equiv. -Wfoo)
+# # -w-foo : disable warning foo (equiv. -Wno-foo)
+ACFLAGS += -w-macro-params
+# # -[eE] : preprocess only (writes output to stdout by default) - resolves macros
+# ACFLAGS = -e
+# ACFLAGS = -E
+
+
+# # #
+# c++ comlpiler
+# # #
 CC = gcc
-CCFLAGS = -g
-CCompile = -c
 
-# lib_io64
-lib_io64_dir = lib_io64
-lib_io64_path = ../../${lib_io64_dir}
-lib_io64 = 
-lib_io64 += ${lib_io64_path}/asm64_io.o
-lib_io64 += ${lib_io64_path}/driver64.o
+CCFLAGS =
+# -g : produce system-native debug information for gdb
+CCFLAGS += -g
+# -c : compile and assemble, but not link
+CCFLAGS += -c
+# -m32 : ???? allow compilation for 32bit
+# CCFLAGS += -m32
 
-# make flag
-SILENT_DIR = --no-print-directory
+
+# # #
+# linker
+# # #
+LD = gcc
+
+LDFLAGS =
+# -g : produce system-native debug information for gdb
+LDFLAGS += -g
+# -m32 : ???? allow linking for 32bit
+# LDFLAGS += -m32
+
+# IMPORTANT !!! you need proper 32bit versions of libraries 
+# for GCC to find and link/compile in 32bit mode
+# the below solves the missing-sources-problem
+# 
+# sudo apt-get update
+# sudo apt-get install libc6-dev-i386
+
+
+# # #
+# make flags
+# # #
+MAKEFLAGS = --no-print-directory
+
+
+# file settings and commons
+EXCERCISE = excercise
+MAIN = main
+ASOURCE_ext = asm
+CSOURCE_ext = c
+OBJECT_ext = o
+LIST_ext = lst
 
 # $@ is the left side of the :
 # $^ is the right side of the :
@@ -37,28 +83,22 @@ SILENT_DIR = --no-print-directory
 # $@ : $^ ... ...
 # $@ : $< <=first<=
 
-${FILE}: ${FILE}.${OBJECT} lib_io64
-	${CC} ${CCFLAGS} ${lib_io64} $< -o $@
+# remember, make executes the FIRST make rule it encounters and nothing more
+# ${EXCERCISE}: ${EXCERCISE}.${OBJECT_ext} ${MAIN}.${OBJECT_ext}
+${EXCERCISE}: ${EXCERCISE}.${OBJECT_ext}
+	${LD} ${LDFLAGS} $^ -o $@
 
-clean_${FILE}:
-	rm -f *.${OBJECT}
-	rm -f ${FILE}
-	rm -f ${FILE}.${LIST}
-	rm -f makefile~
-	rm -f *.gz
+${EXCERCISE}.${OBJECT_ext}: ${EXCERCISE}.${ASOURCE_ext}
+	${AC} ${ACFLAGS} -l ${EXCERCISE}.${LIST_ext} $^ -o $@
 
-${FILE}.${OBJECT}: ${FILE}.${SOURCE}
-	${AC} ${ACFLAGS} -l ${FILE}.${LIST} $^ -o $@
-
-
-
-${lib_io64_dir}:
-	cd ${lib_io64_path} && $(MAKE) ${SILENT_DIR}
-
-clean_${lib_io64_dir}:
-	cd ${lib_io64_path} && $(MAKE) ${SILENT_DIR} clean
-
+# ${MAIN}.${OBJECT_ext}: ${MAIN}.${CSOURCE_ext}
+# 	${CC} ${CCFLAGS} $^ -o $@
 
 # The .PHONY rule keeps make from doing something with a file named clean
-.PHONY: clean
-clean: clean_${FILE} clean_${lib_io64_dir}
+clean: clean_${EXCERCISE}
+clean_${EXCERCISE}:
+	rm -f *.${OBJECT_ext}
+	rm -f ${EXCERCISE}
+	rm -f ${EXCERCISE}.${LIST_ext}
+	rm -f makefile~
+	rm -f *.gz

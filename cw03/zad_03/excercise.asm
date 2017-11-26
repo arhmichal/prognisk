@@ -25,7 +25,7 @@ section .text   ; the code parto of file
 ; ( np. dla liczby 123 wynikiem powinno być "123",0). 
 ; Program powinien prezentować możliwości tych funkcji.
 
-Function asm_main
+Function main
 
     exec itos, -138
     exec itos, 11
@@ -48,8 +48,8 @@ function itos;(int number) ; assume integer
 
     zero rcx ; this block init-zero both strings
     while rcx, l, maxStringSize
-        mov _8b [returnString+rcx], 0
-        mov _8b [reversedString+rcx], 0
+        mov char.cast [returnString+rcx], 0
+        mov char.cast [reversedString+rcx], 0
         inc rcx
     endwhile
 
@@ -119,7 +119,7 @@ function stoi;(std::string text) ; assume integer
         inc rcx
     endif
 
-    while _8b text(rcx), ne, 0 ; agregate
+    while char.cast text(rcx), ne, 0 ; agregate
         mov  al, text(rcx)
         sub  al, '0'
         imul rdi, 10

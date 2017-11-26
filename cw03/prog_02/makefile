@@ -19,6 +19,7 @@ ACFLAGS += -g
 # ACFLAGS += -o
 # # -I<path> : add <path> to search paths for looking for the includes
 ACFLAGS += -I../../lib_arh64/
+ACFLAGS += -I../../lib_io64/
 # # -D<macro>[=<value>] : pre-defines a macro
 # ACFLAGS += -D<macro>[=<value>]
 # # -w+foo : enables warning foo (equiv. -Wfoo)
@@ -46,6 +47,7 @@ CCFLAGS += -c
 # # #
 # linker
 # # #
+# LD = ld
 LD = gcc
 
 LDFLAGS =
@@ -53,6 +55,9 @@ LDFLAGS =
 LDFLAGS += -g
 # -m32 : ???? allow linking for 32bit
 # LDFLAGS += -m32
+# -m XXX # ld linker emulation mode
+# LDFLAGS += -m elf_i386
+# LDFLAGS += -m elf_x86_64
 
 # IMPORTANT !!! you need proper 32bit versions of libraries 
 # for GCC to find and link/compile in 32bit mode
@@ -69,12 +74,20 @@ MAKEFLAGS = --no-print-directory
 
 
 # file settings and commons
-EXCERCISE = excercise
+EXCERCISE = prog
 MAIN = main
 ASOURCE_ext = asm
 CSOURCE_ext = c
 OBJECT_ext = o
 LIST_ext = lst
+
+
+# lib_io64
+lib_io64_dir = lib_io64
+lib_io64_path = ../../${lib_io64_dir}
+lib_io64 = 
+lib_io64 += ${lib_io64_path}/asm64_io.o
+lib_io64 += ${lib_io64_path}/driver64.o
 
 # $@ is the left side of the :
 # $^ is the right side of the :
@@ -85,8 +98,8 @@ LIST_ext = lst
 
 # remember, make executes the FIRST make rule it encounters and nothing more
 # ${EXCERCISE}: ${EXCERCISE}.${OBJECT_ext} ${MAIN}.${OBJECT_ext}
-${EXCERCISE}: ${EXCERCISE}.${OBJECT_ext}
-	${LD} ${LDFLAGS} $^ -o $@
+${EXCERCISE}: ${EXCERCISE}.${OBJECT_ext} lib_io64
+	${LD} ${LDFLAGS} $< ${lib_io64} -o $@
 
 ${EXCERCISE}.${OBJECT_ext}: ${EXCERCISE}.${ASOURCE_ext}
 	${AC} ${ACFLAGS} -l ${EXCERCISE}.${LIST_ext} $^ -o $@
@@ -94,8 +107,15 @@ ${EXCERCISE}.${OBJECT_ext}: ${EXCERCISE}.${ASOURCE_ext}
 # ${MAIN}.${OBJECT_ext}: ${MAIN}.${CSOURCE_ext}
 # 	${CC} ${CCFLAGS} $^ -o $@
 
+${lib_io64_dir}:
+	cd ${lib_io64_path} && $(MAKE) ${MAKEFLAGS}
+
+clean_${lib_io64_dir}:
+	cd ${lib_io64_path} && $(MAKE) ${MAKEFLAGS} clean
+
+
 # The .PHONY rule keeps make from doing something with a file named clean
-clean: clean_${EXCERCISE}
+clean: clean_${EXCERCISE} clean_${lib_io64_dir}
 clean_${EXCERCISE}:
 	rm -f *.${OBJECT_ext}
 	rm -f ${EXCERCISE}

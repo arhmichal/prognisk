@@ -8,9 +8,9 @@ ACFLAGS =
 # ACFLAGS += -l file.lst
 # # -f <out_format> set output format to <out_format>
 # # # elf64 == x86_64
-ACFLAGS += -f elf64
+# ACFLAGS += -f elf64
 # # # elf32 == i386 == elf
-# ACFLAGS += -f elf32
+ACFLAGS += -f elf32
 # # -F <dbg_format> set debugging format to <dbg_format>
 ACFLAGS += -F dwarf
 # # -g : generate debug information in selected debugging format, see -F
@@ -19,6 +19,7 @@ ACFLAGS += -g
 # ACFLAGS += -o
 # # -I<path> : add <path> to search paths for looking for the includes
 ACFLAGS += -I../../lib_arh64/
+ACFLAGS += -I../../lib_io32/
 # # -D<macro>[=<value>] : pre-defines a macro
 # ACFLAGS += -D<macro>[=<value>]
 # # -w+foo : enables warning foo (equiv. -Wfoo)
@@ -40,19 +41,23 @@ CCFLAGS += -g
 # -c : compile and assemble, but not link
 CCFLAGS += -c
 # -m32 : ???? allow compilation for 32bit
-# CCFLAGS += -m32
+CCFLAGS += -m32
 
 
 # # #
 # linker
 # # #
+# LD = ld
 LD = gcc
 
 LDFLAGS =
 # -g : produce system-native debug information for gdb
 LDFLAGS += -g
 # -m32 : ???? allow linking for 32bit
-# LDFLAGS += -m32
+LDFLAGS += -m32
+# -m XXX # ld linker emulation mode
+# LDFLAGS += -m elf_i386
+# LDFLAGS += -m elf_x86_64
 
 # IMPORTANT !!! you need proper 32bit versions of libraries 
 # for GCC to find and link/compile in 32bit mode
@@ -69,12 +74,19 @@ MAKEFLAGS = --no-print-directory
 
 
 # file settings and commons
-EXCERCISE = excercise
+EXCERCISE = prog
 MAIN = main
 ASOURCE_ext = asm
 CSOURCE_ext = c
 OBJECT_ext = o
 LIST_ext = lst
+
+# lib_io32
+lib_io32_dir = lib_io32
+lib_io32_path = ../../${lib_io32_dir}
+lib_io32 = 
+lib_io32 += ${lib_io32_path}/asm_io.o
+lib_io32 += ${lib_io32_path}/driver.o
 
 # $@ is the left side of the :
 # $^ is the right side of the :
@@ -85,8 +97,8 @@ LIST_ext = lst
 
 # remember, make executes the FIRST make rule it encounters and nothing more
 # ${EXCERCISE}: ${EXCERCISE}.${OBJECT_ext} ${MAIN}.${OBJECT_ext}
-${EXCERCISE}: ${EXCERCISE}.${OBJECT_ext}
-	${LD} ${LDFLAGS} $^ -o $@
+${EXCERCISE}: ${EXCERCISE}.${OBJECT_ext} lib_io32
+	${LD} ${LDFLAGS} $< ${lib_io32} -o $@
 
 ${EXCERCISE}.${OBJECT_ext}: ${EXCERCISE}.${ASOURCE_ext}
 	${AC} ${ACFLAGS} -l ${EXCERCISE}.${LIST_ext} $^ -o $@
@@ -94,8 +106,15 @@ ${EXCERCISE}.${OBJECT_ext}: ${EXCERCISE}.${ASOURCE_ext}
 # ${MAIN}.${OBJECT_ext}: ${MAIN}.${CSOURCE_ext}
 # 	${CC} ${CCFLAGS} $^ -o $@
 
+${lib_io32_dir}:
+	cd ${lib_io32_path} && $(MAKE) ${MAKEFLAGS}
+
+clean_${lib_io32_dir}:
+	cd ${lib_io32_path} && $(MAKE) ${MAKEFLAGS} clean
+
+
 # The .PHONY rule keeps make from doing something with a file named clean
-clean: clean_${EXCERCISE}
+clean: clean_${EXCERCISE} clean_${lib_io32_dir}
 clean_${EXCERCISE}:
 	rm -f *.${OBJECT_ext}
 	rm -f ${EXCERCISE}

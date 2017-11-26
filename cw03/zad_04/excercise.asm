@@ -38,7 +38,7 @@ section .text   ; the code parto of file
 ; 123 zoz nz plgz.
 ; 123 ala ma kota.
 
-Function asm_main
+Function main
 
 %ifdef DEBUG_ON
     execIO printf, '%d/ asm_main() s1 = "%s"%c', __LINE__, str_s1, nl

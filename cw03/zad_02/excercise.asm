@@ -22,7 +22,7 @@ section .text   ; the code part of file
 ; Funkcja powinna samodzielnie posprzątać te dane ze stosu (proszę uważać na adres powrotu).
 ; Po powrocie z funkcji element maksymalny powinien znajdować się w rejestrze RAX. 
 
-Function asm_main
+Function main
 
     push    long_array.len, int_array
     exec    getMaxElem

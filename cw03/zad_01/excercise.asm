@@ -22,7 +22,7 @@ section .text   ; the code part of file
 ; Na ekran należy wypisać
 ; ilość wczytanych liczb mniejszych od A. 
 
- Function asm_main
+ Function main
 
     zero    rax, rbx, rcx, rdx
     mov     r13, rsp

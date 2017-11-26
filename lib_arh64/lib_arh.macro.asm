@@ -81,7 +81,7 @@
     %define stackElement.cast long.cast
 %endif
 
-%macro byte 2+
+%macro bajt 2+
     byte_%1: db %2
 %endmacro
 %macro char 2+
