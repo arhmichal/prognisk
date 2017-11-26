@@ -1,5 +1,10 @@
 %include "lib_arh.macro.asm"
 %include "fuck_io.macro.asm"
+; %include "fuck_logic.macro.asm"
+
+extern  printf  ; the C function, to be called
+extern  scanf   ; the C function, to be called
+
 
 section .text   ; the code parto of file
 
@@ -10,11 +15,7 @@ section .text   ; the code parto of file
 ; najmniejszej wspólnej wielokrotności dwóch liczb
 ; wczytanych z klawiatury.
 
-; global _start   ; makes it public
-; _start:         ; the main() of assembler ; no longer used because of using lib_io64
-
-  global asm_main
-function asm_main
+Function main
 
     execIO  printf,    "calculating Least Common Multiple, need two numbers%c", nl
     execIO  scanf,     "%i%i", long_a, long_b

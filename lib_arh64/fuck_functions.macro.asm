@@ -137,28 +137,26 @@
 %endmacro
 
 
-%macro return 0-1 0
-    %pop
-    mov     reax, %1
-    leave
-    ret
-%endmacro
-%macro return 2
-    %pop
-    mov     reax, %1
-    leave
-    ret     %2
-%endmacro
-
 
 %macro function 1
-    %push %1
+    %define __Function_Name__ %1
 %1: enter 0, 0
     defArray args, stackElement.size, rebp+stackElement.size*2
 %endmacro
 %macro Function 1
   global %1
 function %1
+%endmacro
+
+%macro return 0-1 0
+    mov     reax, %1
+    leave
+    ret
+%endmacro
+%macro return 2
+    mov     reax, %1
+    leave
+    ret     %2
 %endmacro
 
 %macro defineParam 2; paramValue, name

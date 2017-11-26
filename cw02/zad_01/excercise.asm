@@ -1,5 +1,9 @@
 %include "lib_arh.macro.asm"
 %include "fuck_io.macro.asm"
+; %include "fuck_logic.macro.asm"
+
+extern  printf  ; the C function, to be called
+extern  scanf   ; the C function, to be called
 
 section .text   ; the code parto of file
 
@@ -10,13 +14,7 @@ section .text   ; the code parto of file
 ; W wersji podstawowej liczba może być na sztywno wpisana w program.
 ; W rozszerzonej wczytujemy ją z klawiatury.
 
-; global _start   ; makes it public
-; _start:         ; the main() of assembler ; no longer used because of using lib_io64
-
-global asm_main
-asm_main:
-    enter 0,0
-main:
+Function main
 
     zero    rax, rbx, rcx, rdx
 
@@ -40,8 +38,7 @@ main:
     return;
 
 
-f_isPrime:
-    enter 0,0
+function f_isPrime
     zero    rax, rbx, rcx, rdx
 
     mov     rax, fArg0
