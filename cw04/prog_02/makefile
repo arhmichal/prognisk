@@ -69,7 +69,7 @@ MAKEFLAGS = --no-print-directory
 
 
 # file settings and commons
-EXCERCISE = wyk_prog
+EXCERCISE = prog
 MAIN = main
 ASOURCE_ext = asm
 CSOURCE_ext = c
