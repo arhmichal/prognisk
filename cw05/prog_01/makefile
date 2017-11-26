@@ -18,7 +18,7 @@ ACFLAGS += -g
 # # -o <file> : output to the <file>
 # ACFLAGS += -o
 # # -I<path> : add <path> to search paths for looking for the includes
-ACFLAGS += -I../../lib_arh64/
+ACFLAGS += -I../../lib_arh/
 # # -D<macro>[=<value>] : pre-defines a macro
 # ACFLAGS += -D<macro>[=<value>]
 # # -w+foo : enables warning foo (equiv. -Wfoo)
