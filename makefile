@@ -21,8 +21,13 @@ Z1 = cw01
 Z2 = cw02
 Z3 = cw03
 Z4 = cw04
+Z5 = cw05
+Z6 = cw06
+Z7 = cw07
+Z8 = cw08
+Z9 = cw09
 
-ALL = ${io32} ${io64} ${Z1} ${Z2} ${Z3} ${Z4}
+ALL = ${io32} ${io64} ${Z1} ${Z2} ${Z3} ${Z4} ${Z5}
 all: ${ALL}
 .PHONY: ${ALL}
 
@@ -47,6 +52,21 @@ ${Z3}:
 ${Z4}:
 	cd ${Z4} && $(MAKE) ${MAKEFLAGS}
 
+${Z5}:
+	cd ${Z5} && $(MAKE) ${MAKEFLAGS}
+
+${Z6}:
+	cd ${Z6} && $(MAKE) ${MAKEFLAGS}
+
+${Z7}:
+	cd ${Z7} && $(MAKE) ${MAKEFLAGS}
+
+${Z8}:
+	cd ${Z8} && $(MAKE) ${MAKEFLAGS}
+
+${Z9}:
+	cd ${Z9} && $(MAKE) ${MAKEFLAGS}
+
 # # #
 # clean targets
 # # #
@@ -56,9 +76,14 @@ CZ1 = clean_cw01
 CZ2 = clean_cw02
 CZ3 = clean_cw03
 CZ4 = clean_cw04
+CZ5 = clean_cw05
+CZ6 = clean_cw06
+CZ7 = clean_cw07
+CZ8 = clean_cw08
+CZ9 = clean_cw09
 
 .PHONY: clean
-CLEAN_ALL = ${cio32} ${cio64} ${CZ1} ${CZ2} ${CZ3} ${CZ4}
+CLEAN_ALL = ${cio32} ${cio64} ${CZ1} ${CZ2} ${CZ3} ${CZ4} ${CZ5}
 clean: ${CLEAN_ALL}
 
 ${cio32}:
@@ -78,3 +103,18 @@ ${CZ3}:
 
 ${CZ4}:
 	cd ${Z4} && $(MAKE) ${MAKEFLAGS} clean
+
+${CZ5}:
+	cd ${Z5} && $(MAKE) ${MAKEFLAGS} clean
+
+${CZ6}:
+	cd ${Z6} && $(MAKE) ${MAKEFLAGS} clean
+
+${CZ7}:
+	cd ${Z7} && $(MAKE) ${MAKEFLAGS} clean
+
+${CZ8}:
+	cd ${Z8} && $(MAKE) ${MAKEFLAGS} clean
+
+${CZ9}:
+	cd ${Z9} && $(MAKE) ${MAKEFLAGS} clean
