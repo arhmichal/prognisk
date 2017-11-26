@@ -8,8 +8,6 @@ extern  printf  ; the C function, to be called
 extern  scanf   ; the C function, to be called
 
 section .data   ; Initialized data
-    long a, 0
-    long b, 0
 
 section .bss    ; UnInitialized data
 
@@ -23,5 +21,6 @@ section .text   ; the code parto of file
 
 ; wyliczającą wartość wyrażenia y=ax3+bx2+cx+d. Funkcja ma pobierać dane wejściowe od procedury wołającej napisanej w C, która wyświetla wyniki obliczeń.
 
-Function main
+Function main;() return void
+
     return;
