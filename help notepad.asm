@@ -544,6 +544,16 @@ jeśli klasa ma funkcję virtualną, i huj, wtedy
 ; flołty i dable
 ; ; ;
 
+"world ani`t all sunshine and rainbows ..."
+"... it`s a mean and nasty place"
+w myśl tej zasady, FPU to ODDZIELNA JEDNOSTA OBLICZEŃ, która ma
+    - własny, inny zestaw poleceń
+    - własny, nie synchronizowany zegar cykli procesora
+    - własny stos
+    - własne flagi warunkowe i wyjątki
+    - ...
+    - coś jeszcze o czym teraz jeszcze nie wiesz, bo to napewno nie koniec
+
 
 Wszystkie instrukcje FPU [Float Processing Unit] poprzedzone są przedrostkiem F.
 
@@ -623,5 +633,122 @@ arytmetyka
     F2XM1 ; ST0 = 2^ST0 - 1
     ; & pop oznacza, że wynik będący w ST1 => ST0 przesówa się do ST0
 
+FPU controll
+    15 14 13 12 11 10 09 08 | 07 06 05 04 03 02 01 00 | bity flag
+             _X __RC_ __PC_ |       PM UM OM ZM DM IM
+
+    ; flagi konrtolne - zachowanie zaokrąglania, precyzja obliczeń, itd..
+    12 : X : infinity controll
+    11:10 : RC : rounding controll
+        00 do najbliższej (równe? do parzystej)
+        01 w dół (do -inf)
+        10 w górę (do +inf)
+        11 trunk (w kierunku 0)
+    09:08 : PC : precision controll - precyzja przy obliczeniach
+        00 24bit (float)
+        01 ---
+        10 53bit (double)
+        11 64bit (long double) [default]
+
+    ; maski wyjątków - czy rzucić wyjątkiem w danych sytuacjach
+    ; default - ustawia odpowiednią flagę, ale nic nie rzuca
+    05 : PM : precision mask
+    04 : UM : underflow mask
+    03 : OM : overflow mask
+    02 : ZM : zero divide mask
+    01 : DM : denormal operand mask
+    00 : IM : invalid operand mask
+
+FPU status
+    15 14 13 12 11 10 09 08 | 07 06 05 04 03 02 01 00 | bity flag
+    _B C3 ___TOP__ C2 C1 C0 | ES SF PE UE OE ZE DE IE
+
+    ; flagi konrtolne - zachowanie zaokrąglania, precyzja obliczeń, itd..
+    15 : B : FPU busy
+    14 : C3 : condition code 3
+    13:12:11 : TOP : top of the stack pointer - index rejestru na szczycie stosu FPU
+    10 : C2 : condition code 2
+    09 : C1 : condition code 1
+    09 : C0 : condition code 0
+    ; C0, C1, C2, C3 - ustawiane przez instrukcje porównania, odpowiadają odpowiednim flagom procesora
+
+    ; maski wyjątków - czy rzucić wyjątkiem w danych sytuacjach
+    ; default - ustawia odpowiednią flagę, ale nic nie rzuca
+    07 : ES : error summary status
+    06 : SF : stack fault
+    05 : PE : precision exception flag
+    04 : UE : underflow exception flag
+    03 : OE : overflow exception flag
+    02 : ZE : zero divide exception flag
+    01 : DE : denormal operand exception flag
+    00 : IE : invalid operand exception flag
+
+    FCLEX - Fpu CLear EXceptions - ręczne czyszczenie flag błędów w FPU - bo nie ma automatycznego
+    ; flagi wyjątków 00-05 są ustawiane przez operazje FPU i zawierają NIR-TYLKO-STAN-OSTATNIEJ-OPERACJU więc potencjalnie błędo-genne, trzeba ręcznie je czyścic za pomocą FCLEX
 
 
+
+
+
+
+ Instrukcje kontrolne
+
+    WAIT/FWAIT - czekaj, aż FPU skończy pracę. Używane do synchronizacji z CPU.
+    Wiele z poniższych instrukcji wywołuje tą instrukcję niejawnie. Wersje z literką N nie wywołują WAIT
+    FINIT/FNINIT - inicjalizacja FPU, przywraca FPU do domyślnego stanu: ustawia flagi, czyści stos.
+    Dobrą praktyką jest wywoływanie go przed przystąpieniem do obliczeń (bo nie wiemy w jakim stanie inne funkcje zostawiły FPU)
+    FLDCW, FSTCW/FNSTCW - Load/Store control word - zapisuje 16 kontrolnych bitów do pamięci, gdzie można je zmieniać na przykład aby zmienić sposób zaokrąglania liczb.
+    FSTSW/FNSTSW - zapisz do pamięci (lub rejestru AX) słowo statusu, czyli stan FPU
+    FCLEX/FNCLEX - wyczyść wyjątki
+    FLDENV, FSTENV/FNSTENV - wczytaj/zapisz środowisko (rejestry stanu, kontrolny i kilka innych, bez rejestrów danych). Wymaga 14 albo 28 bajtów pamięci, w zależności od trybu pracy procesora (rzeczywisty - DOS lub chroniony - Windows/Linux).
+    FRSTOR, FSAVE/FNSAVE - jak wyżej, tylko że z rejestrami danych. Wymaga 94 lub 108 bajtów w pamięci, zależnie od trybu procesora.
+    FINCSTP, FDECSTP - zwiększ/zmniejsz wskaźnik stosu - przesuń st(0) na st(7), st(1) na st(0) itd. oraz w drugą stronę, odpowiednio.
+    FFREE - zwolnij podany rejestr danych
+    FNOP - no operation. Nic nie robi, ale zabiera czas.
+
+
+
+
+
+ Komendy porównania
+
+FPU oprócz rejestrów danych zawiera także rejestr kontrolny (16 bitów) i rejestr stanu (16 bitów).
+W rejestrze stanu są 4 bity nazwane C0, C1, C2 i C3. To one wskazują wynik ostatniego porównania, a układ ich jest taki sam, jak flag procesora, co pozwala na ich szybkie przeniesienie do flag procesora.
+
+Aby odczytać wynik porównania, należy przenieść rejestr flag z koprocesora do procesora:
+
+fcom       ;  porównujemy
+fstsw ax   ;  kopiujemy rejestr flag koprocesora do ax 
+sahf       ;  AH zapisane do flag
+
+Następnie możemy używać rozkazów skoków tak jak dla liczb całkowitych bez znaku: JE, JB itp.
+
+    FCOM st(n)/[mem] -       porównaj st(0) z st(n) (lub zmienną w pamięci) bez zdejmowania st(0) ze stosu FPU
+    FCOMP st(n)/[mem] -       porównaj st(0) z st(n) (lub zmienną w pamięci) i zdejmij st(0)
+    FCOMPP -       porównaj st(0) z st(1) i zdejmij oba ze stosu
+    FICOM [mem] -       porównaj st(0) ze zmienną całkowitą 16- lub 32-bitową w pamięci
+    FICOMP [mem] -       porównaj st(0) ze zmienną całkowitą 16- lub 32-bitową w pamięci, zdejmij st(0)
+    FCOMI st(0), st(n) -       porównaj st(0) z st(n) i ustaw flagi procesora, nie tylko FPU
+    FCOMIP st(0), st(n) -       porównaj st(0) z st(n) i ustaw flagi procesora, nie tylko FPU, zdejmij st(0)
+
+Komendy kończące się na I lub IP zapisują swój wynik bezpośrednio do flag procesora. Można tych flag od razu używać (JZ, JA, ...). Te komendy są dostępne od Pentium Pro.
+
+FTST porównuje st(0) z zerem.
+
+
+
+
+
+ Typ liczby
+
+FXAM bada, co jest w st(0) - prawidłowa liczba, błąd (NaN = Not a Number), czy 0.
+Rodzaj liczby   C3  C2  C0
+Błędna liczba   0   0   0
+NaN     0   0   1
+Zwykła liczba skończona     0   1   0
+Nieskończoność  0   1   1
+Zero    1   0   0
+Pusty rejestr   1   0   1
+Liczba zdenormalizowana     1   1   0
+
+Rejest C1 zawiera znak liczby w ST0
