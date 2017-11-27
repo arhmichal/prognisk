@@ -507,5 +507,121 @@ suma:       ; kazdy inny kompilator wymaga prefix '_'
 add dx, [rbx + 2*rcx - 2]   ; rbx ma pointer do tablicy
                             ; index można wyliczać też z wartości rejestru
 
+; przydatne do podglądnięcia np. jaką nazwę ma funkcja, zwłaszcza gdy jest przeładowana
+
+; convert cpp to asm
+g++ -S plik.cpp -o plik.asm
+
+; convert cpp to asm ; ze składnią bliską do NASM
+g++ -masm=intel -S plik.cpp -o plik.asm
+
+; hint przy interfejsowaniu
+Wywołując niestatyczną metodę klasy jako pierwszy parametr przekazujemy adres obiektu
+
+class A { public:
+  char ma;                       
+  void f() { cout << "\n f w A \n"; }
+};
+ 
+class B : public A { public:
+  int mb;
+  void f() { cout << "\n f w B \n"; }
+};
+
+rozmiar A == 1 ; char.zise == 1
+rozmiar B == 8 !!! ; char.zise == 1, int.zise == 4
+    ponieważ
+    adres pola `ma` jest struct+0
+    adres pola `mb` jest struct+4 !!! bo jest wyrównane do 4
+        i tutaj ukryły się dodatkowe bajty, zupełónie nieurzywane, ale tam są
+jeśli klasa ma funkcję virtualną, i huj, wtedy
+    pole `ma` ma adres struct+8 ; dla 64bit
+    bo pierwsza jest tablica funkcji virtualnych
+    pole `mb` nadal jest wyrównane do 4, więc struck+12
+
+
+; ; ;
+; flołty i dable
+; ; ;
+
+
+Wszystkie instrukcje FPU [Float Processing Unit] poprzedzone są przedrostkiem F.
+
+FPU ma CYKLICZNY STOS REJESTRÓW na liczby zmiennoprzecinkowe
+rejestry:
+    ST0, ST1, ST2, ST3, ST4, ST5, ST6, ST7 => STX oznacza X-ty rejestr
+    ; gdzie ST0 zawsze wskazuje na szczyt stosu i przy push/pop przesówane są tylko wskaźniki
+
+operacje
+    F* - float
+    *LD* - load
+    *LG* - log
+    *LN* - ln = log_e()
+    *P - pop - zdejmuje ze stosu flołtów
+    *I* - operation with INT
+
+    FLD [mem32/64/80, STX] ; ST0 = arg
+    ; umieszcza liczbę zmiennoprzecinkową pojedynczej, podwójnej lub rozszerzonej precyzji na szczycie stosu.
+    ; src może być adresem pamięci lub rejestrem koprocesora.
+    ; src nie może być rejesterem ogólnego przeznaczenia.
+    FILD [mem16/32/64] ; ST0 = cast<float>(arg)
+    
+    ; Instrukcje ładowania stałych ; zapis ze slajdów
+        FLDZ ; załaduj zero. ST0 = 0.0
+        FLD1 ; załaduj 1. ST0 = 1.0
+        FLDPI ; załaduj pi.
+        FLDL2T ; załaduj log2(10)
+        FLDL2E ; załaduj log2(e)
+        FLDLG2 ; załaduj log(2)=log10(2)
+        FLDLN2 ; załaduj ln(2)
+
+
+Instrukcje które zdejmują wartość ze stosu mają przyrostek P, jeżeli zdejmują dwie wartości to PP
+
+    FST [mem32/64/80 STX] ; mov target, ST0
+    FSTP [mem32/64/80] ; FST + pop
+    FIST [mem16/32] ; mov target, cast<int>(ST0) ; Sposób zaokrąglania zależy od flag koprocesora.
+    FISTP [mem16/32/64] ; FiST + pop
+    FXCH STX ; swap ST0 z STX.
+
+arytmetyka
+    ADD [FADD]
+        FADD [mem32/64] / STX ; ST0 += arg
+        FADD STX, ST0 ; STX += ST0
+        FADDP ... ; FADD + pop
+        FIADD [mem32/64] ; ST0 += cast<float>(arg)
+
+    ; analogiczne operacje
+    SUB [FSUB] analogicznie
+        FSUB [mem32/64] / STX ; ST0 += arg
+        FSUB STX, ST0 ; STX += ST0
+        FSUBP ... ; FSUB + pop
+        FISUB [mem32/64] ; ST0 += cast<float>(arg)
+    SUBR [FSUBR] odwrucone odejmowanie
+        FSUBR [mem32/64] / STX ; ST0 = arg - ST0
+        FSUBR STX, ST0 ; STX = ST0 - STX
+        FSUBRP ... ; FSUBR + pop
+        FISUBR [mem32/64] ; ST0 = cast<float>(arg) - ST0
+    MUL [FMUL] analogicznie
+    DIV [FDIV] analogicznie
+    DIVR [FDIVR] analogicznie, odwrucone dzielenie
+
+    ; kolejne operacje na FPU
+    FABS ; ST0 = |ST0| (wartość bezwzględna)
+    FCHS ; ST0 = -ST0 (zmiana znaku)
+    FSQRT ; ST0 = sqrt(ST0)
+    FRNDINT ; ST0 = round(ST0)
+
+    FSIN ; ST0 = sin(ST0)
+    FCOS ; ST0 = cos(ST0)
+    FSINCOS ; ST0 = cos(ST0), ST1 = sin(ST0)
+    FPTAN ; partial_? ; ST0 = tg(ST0)
+    FPATAN ; ST0 = atg(ST0)
+
+    FYL2X ; ST1 = ST1 * log2(ST0) & pop
+    FYL2XPI ; ST1 = ST1 * log2( ST0 + 1.0 ) & pop
+    F2XM1 ; ST0 = 2^ST0 - 1
+    ; & pop oznacza, że wynik będący w ST1 => ST0 przesówa się do ST0
+
 
 
