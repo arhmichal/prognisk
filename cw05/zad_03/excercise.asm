@@ -8,8 +8,6 @@ extern  printf  ; the C function, to be called
 extern  scanf   ; the C function, to be called
 
 section .data   ; Initialized data
-    int a, 0
-    int b, 0
 
 section .bss    ; UnInitialized data
 

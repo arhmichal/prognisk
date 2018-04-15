@@ -60,7 +60,10 @@
 %idefine word.size 2
 %idefine short.size 2
 %idefine int.size 4
+%idefine float.size 4
 %idefine long.size 8
+%idefine double.size 8
+%idefine longdouble.size 10
 
 %define _8b byte
 %idefine byte.cast byte
@@ -70,15 +73,21 @@
 %idefine short.cast word
 %define _32b dword
 %idefine int.cast dword
+%idefine float.cast dword
 %define _64b qword
 %idefine long.cast qword
+%idefine double.cast qword
 
 %if __BITS__ == 32
     %define stackElement.size int.size
+    %define stack.size int.size
     %define stackElement.cast int.cast
+    %define stack.cast int.cast
 %elif __BITS__ == 64
     %define stackElement.size long.size
+    %define stack.size long.size
     %define stackElement.cast long.cast
+    %define stack.cast long.cast
 %endif
 
 %macro bajt 2+
@@ -96,8 +105,14 @@
 %macro int 2+
     int_%1: dd %2
 %endmacro
+%macro float 2+
+    float_%1: dd %2
+%endmacro
 %macro long 2+
     long_%1: dq %2
+%endmacro
+%macro double 2+
+    double_%1: dq %2
 %endmacro
 %macro cstring 2+
     str_%1: db %2, 0
@@ -112,7 +127,7 @@
 %endmacro
 
 
-
+; TODO ; remove/replace devE and divR
 %macro divE 2
     zero    eax, edx
     mov     eax, %1

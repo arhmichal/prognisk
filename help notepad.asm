@@ -551,13 +551,14 @@ w myśl tej zasady, FPU to ODDZIELNA JEDNOSTA OBLICZEŃ, która ma
     - własny, nie synchronizowany zegar cykli procesora
     - własny stos
     - własne flagi warunkowe i wyjątki
+    - i nawet kurwa odpowiednik JOIN dla wątków
     - ...
-    - coś jeszcze o czym teraz jeszcze nie wiesz, bo to napewno nie koniec
+    - i coś jeszcze o czym teraz jeszcze nie wiesz, bo to napewno nie koniec
 
 
 Wszystkie instrukcje FPU [Float Processing Unit] poprzedzone są przedrostkiem F.
 
-FPU ma CYKLICZNY STOS REJESTRÓW na liczby zmiennoprzecinkowe
+FPU ma CYKLICZNY STOS REJESTRÓW na liczby zmiennoprzecinkowe po 80bit każdy
 rejestry:
     ST0, ST1, ST2, ST3, ST4, ST5, ST6, ST7 => STX oznacza X-ty rejestr
     ; gdzie ST0 zawsze wskazuje na szczyt stosu i przy push/pop przesówane są tylko wskaźniki
@@ -586,7 +587,7 @@ operacje
         FLDLN2 ; załaduj ln(2)
 
 
-Instrukcje które zdejmują wartość ze stosu mają przyrostek P, jeżeli zdejmują dwie wartości to PP
+Instrukcje które zdejmują wartość ze stosu mają przyrostek *P, jeżeli zdejmują dwie wartości to *PP
 
     FST [mem32/64/80 STX] ; mov target, ST0
     FSTP [mem32/64/80] ; FST + pop
@@ -597,19 +598,19 @@ Instrukcje które zdejmują wartość ze stosu mają przyrostek P, jeżeli zdejm
 arytmetyka
     ADD [FADD]
         FADD [mem32/64] / STX ; ST0 += arg
-        FADD STX, ST0 ; STX += ST0
+        FADD STX[, ST0] ; STX += ST0
         FADDP ... ; FADD + pop
         FIADD [mem32/64] ; ST0 += cast<float>(arg)
 
     ; analogiczne operacje
     SUB [FSUB] analogicznie
         FSUB [mem32/64] / STX ; ST0 += arg
-        FSUB STX, ST0 ; STX += ST0
+        FSUB STX[, ST0] ; STX += ST0
         FSUBP ... ; FSUB + pop
         FISUB [mem32/64] ; ST0 += cast<float>(arg)
     SUBR [FSUBR] odwrucone odejmowanie
         FSUBR [mem32/64] / STX ; ST0 = arg - ST0
-        FSUBR STX, ST0 ; STX = ST0 - STX
+        FSUBR STX[, ST0] ; STX = ST0 - STX
         FSUBRP ... ; FSUBR + pop
         FISUBR [mem32/64] ; ST0 = cast<float>(arg) - ST0
     MUL [FMUL] analogicznie
